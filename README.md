@@ -9,7 +9,7 @@ If you want realistic test and demo data for your Salesforce orgs but cant stand
 
 When I say 'seed data' Im talking about creating data for the purpose of enabling realistic testing and effective demonstration of the awesome work you do in your Salesforce orgs. 
 
-Of course there are already plenty of ways out there already to create seed data. There's test factories that pump out similarly named records and the old 'roll it yourself' approach of creating contacts called test1, test2 etc. Paid apps too. This approach I've used to create SeedPacket I haven't seen before so it'd be good to hear your thoughts on it. Feel free to ping me via linkedin https://www.linkedin.com/in/carlvescovi/ if you've any feedback to share.
+Of course there are already plenty of ways out there already to create seed data. There's test factories that pump out similarly named records and the old 'roll it yourself' approach of creating contacts called test1, test2 etc. I've seen Flow used and there are paid apps too. The approach I've used to create SeedPacket I haven't seen implemented before so it'd be good to hear your thoughts on it. Feel free to ping me via linkedin https://www.linkedin.com/in/carlvescovi/ if you've any feedback to share.
 
 Personally I really want - and think we'd all benefit from having - data that is as close in look, feel, touch and smell to production data as possible, without being production data of course. I think most developers would prefer that too if there was an easy way to generate it.  Finding a simple way to do this has annoyed me for over a decade!
 
