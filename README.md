@@ -1,7 +1,7 @@
 ![Planting Seeds](https://github.com/CloudHugger/CUX_SeedPacket/blob/master/seeddata.jpeg)
 
 # SeedPacket: 
-A way to generate realistic seed data for your Salesforce Orgs
+### A(nother) way to generate realistic seed data for your Salesforce Orgs
 
 If you want realistic test and demo data for your Salesforce orgs but cant stand the thought of having to create it ... yet again! ... then this utility might be of interest! Read on...
 
