@@ -1,0 +1,18 @@
+[
+    {
+    "description":"get contacts and deidentify them",
+    "name":"2",
+    "datatable":"contact",
+    "query":"LIMIT 1000",
+    "params" : {
+        "deidentify" : "FirstName:FIRSTNAME,LastName:LASTNAME,Phone:PHONE,Email:EMAIL,Birthdate:DATE",
+        "bump" : "Birthdate"
+      }
+    },
+    {
+    "description":"get tasks from those accounts and contacts",
+    "name":"3",
+    "datatable":"task",
+    "query":"where WhoId in [[2.Id]]"
+    }
+]
