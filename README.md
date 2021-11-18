@@ -122,7 +122,7 @@ Too easy. Lets say you named it 'seedling'.
 
 **Step 3 - generate your SeedPacket!**
 
-From the Debug Console just execute `SeedPacket.createSeedPacket('seedling');`
+From the Debug Console just execute `SeedPacket.createPacket('seedling');`
 
 Assuming your file definition is interpreted correctly you'll be emailed a SeedPacket file. Hooray! It is in json format - take a look to see whats in it if you're interested.
 
