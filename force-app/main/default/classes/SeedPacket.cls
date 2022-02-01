@@ -30,6 +30,22 @@ public with sharing class SeedPacket implements SandboxPostCopy {
         sendEmail(JSON.serializePretty(p,true));
     }
 
+    public static Packet removeSeedpacketRecordTypeIds(Packet seedpacket){
+        String pktString = JSON.serialize(seedpacket);
+        for(Recordtype rt : [SELECT Id, DeveloperName FROM RecordType]){
+            pktString = pktString.replace(String.valueOf(rt.Id),'__rt__'+rt.DeveloperName);
+        }
+        return (Packet)JSON.deserialize(pktString, Packet.class);
+    }
+
+    public static Packet restoreSeedpacketRecordTypeIds(Packet seedpacket){
+        String pktString = JSON.serialize(seedpacket);
+        for(Recordtype rt : [SELECT Id, DeveloperName FROM RecordType]){
+            pktString = pktString.replace('__rt__'+rt.DeveloperName,String.valueOf(rt.Id));
+        }
+        return (Packet)JSON.deserialize(pktString, Packet.class);
+    }
+    
 
     /**
      * Primary create logic herein
@@ -77,6 +93,7 @@ public with sharing class SeedPacket implements SandboxPostCopy {
                 i.typeMap = objectDetails;
                 seedpacket.ingredients.add(i);
             }
+            seedpacket = removeSeedpacketRecordTypeIds(seedpacket);
             return seedpacket;
             
         } catch (exception e){
@@ -200,6 +217,7 @@ public with sharing class SeedPacket implements SandboxPostCopy {
         // loop through ingredients
         integer stepIndex = 0;
         
+        seedPacket = restoreSeedpacketRecordTypeIds(seedPacket);
 
         for(Ingredient i : seedpacket.ingredients){ // process one object type at a time
             // need to retrieve the bump field info if exists
