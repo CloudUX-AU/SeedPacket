@@ -21,7 +21,7 @@ This approach to generating test data was inspired by nature and aspires to prov
 
 - Real world names for de-identification logic - yay!
 - Consistently inconsistent data, just like production - yay!
-- Ability to 'bump' date fields so your new seed data is always relevant for reporting, dashboarding etc - yay!
+- Ability to 'bump' date fields so your new seed data remains relevant for reporting, dashboarding etc - yay!
 - Can be run via the SandboxPostCopy interface too if you want - yay!
 - Can be used in test classes too to create realistic data - amazing!
 - Can regenerate new test data to reflect current timeframe with a single command! - whoa yay!
@@ -30,7 +30,7 @@ This approach to generating test data was inspired by nature and aspires to prov
 
 ### Thats selling the dream... so how does it work? ###
 
-In short, SeedPacket tackles this challenge differently to most (all I think) other Ive seen. SeedPacket once installed to a source data org (dont worry - very small footprint of a few files) enables creation of 'SeedPackets' via consumption of simple definition file you create. The definition file enables you to nominate a subset of related (or unrelated - your call) source records from that org, spanning as many objects as you want (infinite is probably not possible, but I haven't tested so who knows it might work!) in order of dependency. SeedPacket packages up the information it needs into a single 'SeedPacket' file which is promptly emailed to you by your org. Its readable so feel free to inspect and modify it. You then store that SeedPacket file as a single Static Resource in whatever org you spin sandboxes off (if you want it automatically copied to new sandboxes moving forward), or even straight to a target org - its up to you. SeedPacket creation only needs to happen once for a dataset. Now, every time you create a new sandbox the SeedPacket file is also copied over and then you execute the 'plantSeedPacket' command.  SeedPacket retrieves the SeedPacket file you nominate and incrementally inserts the records in order of dependency linking them up as it goes. Taddah! Mmmm the sweet smell of fresh seed data!
+In short, SeedPacket tackles this challenge differently to most (all I think) other Ive seen. SeedPacket once installed to a source data org (dont worry - very small footprint of a few files) enables creation of 'SeedPackets' via consumption of a simple definition file you create. The definition file enables you to nominate a subset of related (or unrelated - your call) source records from that org, spanning as many objects as you want (infinite is probably not possible, but I haven't tested so who knows it might work!) in order of dependency. SeedPacket packages up the information it needs into a single 'SeedPacket' file which is promptly emailed to you by your org. Its readable so feel free to inspect and modify it. You then store that SeedPacket file as a single Static Resource in whatever org you spin sandboxes off (if you want it automatically copied to new sandboxes moving forward), or even straight to a target org - its up to you. SeedPacket creation only needs to happen once for a dataset. Now, every time you create a new sandbox the SeedPacket file is also copied over and then you execute the 'plantSeedPacket' command.  SeedPacket retrieves the SeedPacket file you nominate and incrementally inserts the records in order of dependency linking them up as it goes. Taddah! Mmmm the sweet smell of fresh seed data!
 
 ### But we cant have production data exposed outside of Production! ###
 
