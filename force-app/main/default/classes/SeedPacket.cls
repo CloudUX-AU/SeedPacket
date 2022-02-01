@@ -30,18 +30,24 @@ public with sharing class SeedPacket implements SandboxPostCopy {
         sendEmail(JSON.serializePretty(p,true));
     }
 
-    public static Packet removeSeedpacketRecordTypeIds(Packet seedpacket){
+    public static Packet removeSeedpacketIds(Packet seedpacket){
         String pktString = JSON.serialize(seedpacket);
         for(Recordtype rt : [SELECT Id, DeveloperName FROM RecordType]){
             pktString = pktString.replace(String.valueOf(rt.Id),'__rt__'+rt.DeveloperName);
         }
+        for(User u : [SELECT Id, Username from User]){
+            pktString = pktString.replace(String.valueOf(u.Id), '__usr__'+u.Username);
+        }
         return (Packet)JSON.deserialize(pktString, Packet.class);
     }
 
-    public static Packet restoreSeedpacketRecordTypeIds(Packet seedpacket){
+    public static Packet restoreSeedpacketIds(Packet seedpacket){
         String pktString = JSON.serialize(seedpacket);
         for(Recordtype rt : [SELECT Id, DeveloperName FROM RecordType]){
             pktString = pktString.replace('__rt__'+rt.DeveloperName,String.valueOf(rt.Id));
+        }
+        for(User u : [SELECT Id, Username from User]){
+            pktString = pktString.replace('__usr__'+u.Username, String.valueOf(u.Id));
         }
         return (Packet)JSON.deserialize(pktString, Packet.class);
     }
@@ -93,7 +99,7 @@ public with sharing class SeedPacket implements SandboxPostCopy {
                 i.typeMap = objectDetails;
                 seedpacket.ingredients.add(i);
             }
-            seedpacket = removeSeedpacketRecordTypeIds(seedpacket);
+            seedpacket = removeSeedpacketIds(seedpacket);
             return seedpacket;
             
         } catch (exception e){
@@ -217,7 +223,7 @@ public with sharing class SeedPacket implements SandboxPostCopy {
         // loop through ingredients
         integer stepIndex = 0;
         
-        seedPacket = restoreSeedpacketRecordTypeIds(seedPacket);
+        seedPacket = restoreSeedpacketIds(seedPacket);
 
         for(Ingredient i : seedpacket.ingredients){ // process one object type at a time
             // need to retrieve the bump field info if exists
