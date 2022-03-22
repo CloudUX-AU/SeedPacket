@@ -9,18 +9,6 @@
  */
 public with sharing class SeedPacket {
     
-    /**
-     * these are the only standard objects that will be included in the scope of the seedpacket prep
-     * ADD MORE AS YOU REQUIRE
-     */
-    private static Set<string> standardObjectInclusions {
-        get{
-            return new Set<String>{'Account','Contact','Asset','AccountContactRelation'} ;
-        }
-    }
-    
-    public class SeedPacketException extends Exception {}
-
     private static Boolean runningInASandbox {
         get {
             if (runningInASandbox == null) {
@@ -47,6 +35,17 @@ public with sharing class SeedPacket {
         }
     }
 
+
+    /**
+     * these are the only standard objects that will be included in the scope of the seedpacket prep
+     */
+    private static Set<string> standardObjectInclusions {
+        get{
+            return new Set<String>{'Account','Contact','Asset','AccountContactRelation'} ;
+        }
+    }
+
+
     /**
      * modify a username to make consistent across orgs regardless of prod or sandbox
      * @param un the username to consider modifying
@@ -56,6 +55,8 @@ public with sharing class SeedPacket {
         return un.substringBefore('@') + '@' + postAt; 
     }
     
+    
+
     /**
      * Create method is used to prepare a SeedPacket file that 
      * once stored as a Static Resource can be used to quickly and 
@@ -97,6 +98,8 @@ public with sharing class SeedPacket {
         return (Packet)JSON.deserialize(pktString, Packet.class);
     }
 
+    
+
     /**
      * replacement ids for user and record type ids
      */
@@ -129,6 +132,8 @@ public with sharing class SeedPacket {
             }
         }
         return i;
+         
+        
     }
     
     /**
@@ -143,6 +148,7 @@ public with sharing class SeedPacket {
             seedpacket.createdDate = date.today();
             List<String> emptyList = new List<String>();
             
+
             Datetime contextDateTime;
             if(seedPacketQuery == null && seedPacketName != null){
                 StaticResource sr = getSeedPacket(seedPacketName);
@@ -168,11 +174,6 @@ public with sharing class SeedPacket {
                     string m = q.substringAfter('[[').substringBefore(']]');
                     string key = '[[' + m + ']]';
                     // build set and store into Ids map
-                    if(!ids.containsKey(key)){
-                        throw new SeedPacketException(
-                            'query is referencing a step that doesnt exist. Check your definition file.'
-                        );
-                    }
                     if(!ids.containsKey(key) 
                         && listsByName.containsKey(m.substringBefore('.'))){ // build the set of ids as a string that can be merged into query string
                         string f = '(';
@@ -204,7 +205,9 @@ public with sharing class SeedPacket {
             }
             seedpacket = removeSeedpacketIds(seedpacket); // replace hardcoded recordtype and user ids with placeholders
             return seedpacket;
+            
         } catch (exception e){
+            system.debug('ERROR:' + e.getMessage());
             throw e;
         }
     }
@@ -317,6 +320,7 @@ public with sharing class SeedPacket {
             // process deidentify requests if any
             integer prefix = 1;
             for(String fld : deidentifyPairs.keySet()){
+                
                 if(record.get(fld) != null){ // only action if there is a value in the field
                     switch on deidentifyPairs.get(fld).toLowerCase() { // act based on type of action requested
                         when 'firstname','lastname' { // replace with a new first name
@@ -391,7 +395,7 @@ public with sharing class SeedPacket {
         fileAttachment.setFileName('SeedPacket_result.json');
         fileAttachment.setBody(Blob.valueOf(seedPacketString));
         email.setSubject( 'Your Seed Packet is attached!' );
-        email.setToAddresses( new String[] {UserInfo.getUserEmail()} );
+        email.setToAddresses( new String[] {/*UserInfo.getUserEmail()*/ 'c.vescovi-ext@traxens.com'} );
         email.setPlainTextBody(body);
         email.setFileAttachments(new Messaging.EmailFileAttachment[] {fileAttachment});
         
@@ -515,6 +519,10 @@ public with sharing class SeedPacket {
             } // else, ignore this duplicate
         }
 
+        // TODO - remove any duplicates prior to insertion.
+
+
+
         // prepped list of records so insert
         
         insertResult += 'Attempting to insert a batch of records...\n\n';
@@ -523,6 +531,7 @@ public with sharing class SeedPacket {
         for (Database.SaveResult result : srList) {
             if (result.isSuccess()) {
                 // Operation was successful, so get the ID of the record that was processed
+                System.debug('Successfully inserted record. ID: ' + result.getId());
                 insertResult += '\nSuccessfully inserted record with Id '+result.getId();
                 
             }
@@ -530,10 +539,13 @@ public with sharing class SeedPacket {
                 // Operation failed, so get all errors   
                 insertResult += '\nError occured:';             
                 for(Database.Error err : result.getErrors()) {
+                    System.debug('The following error has occurred during seed data insert at step \''+i.name+'\':');
                     String recId = (err.getMessage().indexOf('id value of incorrect type:') != -1) ?
                         err.getMessage().substringAfter('id value of incorrect type:').trim() : '';
                     String recType = (recId != '') ? recordObjectType(recId) : '';
+                    System.debug(err.getStatusCode() + ': ' + err.getMessage());
                     insertResult += err.getStatusCode()+'-> '+ err.getMessage();
+                    System.debug('fields that affected this error: ' + err.getFields());
                     insertResult += '\nFields that affected this error: '+err.getFields();
                 }
             }
