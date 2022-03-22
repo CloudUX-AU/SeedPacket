@@ -138,3 +138,12 @@ Assuming you have saved your SeedPacket as a static resource named 'seedlings'
 Just use the Developer Console to execute `SeedPacket.plantSeedPacket('seedlings');`
 
 The Sandbox Post copy interface has also been included so feel free to do the same via a post copy Apex Class execute. The utility currently assumes your SeedPacket would be named 'seedling'. 
+
+
+## READONLY__ feature (added March 2022)
+
+Rather than every query resulting in its data being replicated into the seedpacket, if you want to use a step for reference but not replicate its records then just prefix the step name attribute with 'READONLY__' e.g. I want to query Accounts and not recreate them, just name the step something like 'READONLY__AccountsQuery'.  You can reference that steps data like you would any other query - in this example a step query attribute like 'Where AccountId IN [[READONLY__AccountsQuery.Id]]' would work just like any other query.  I've found this really helpful when trying to find relevant data to replicate.  You can run a READONLY__ query against cases for example, and then start your actual retrieve and replicate steps using the account ids that that first readonly step found.
+
+## Enhancements
+March 2022 / Fixed CPU heap error for complex runs ie. more than 30 steps.  Runs more efficiently now!
+March 2022 / Addition of the READONLY__ feature.
