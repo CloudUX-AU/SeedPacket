@@ -373,7 +373,7 @@ public with sharing class SeedPacket {
     public static void sendResultEmail(string resultString){
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage(); 
         email.setSubject( 'Your data seeding results are in...' );
-        email.setToAddresses( new String[] {/*UserInfo.getUserEmail()*/ 'c.vescovi-ext@traxens.com'} );
+        email.setToAddresses( new String[] {UserInfo.getUserEmail()} );
         email.setPlainTextBody(resultString);
         if(!Test.isRunningTest()) {
             Messaging.SendEmailResult [] res = 
