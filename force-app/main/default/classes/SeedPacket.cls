@@ -391,7 +391,7 @@ public with sharing class SeedPacket {
         fileAttachment.setFileName('SeedPacket_result.json');
         fileAttachment.setBody(Blob.valueOf(seedPacketString));
         email.setSubject( 'Your Seed Packet is attached!' );
-        email.setToAddresses( new String[] {/*UserInfo.getUserEmail()*/ 'c.vescovi-ext@traxens.com'} );
+        email.setToAddresses( new String[] {UserInfo.getUserEmail()} );
         email.setPlainTextBody(body);
         email.setFileAttachments(new Messaging.EmailFileAttachment[] {fileAttachment});
         
