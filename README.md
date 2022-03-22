@@ -74,6 +74,8 @@ Heres an example to get you started.
 
 You save this as a .json file and then save that file into Static Resources in the org that you're scraping seed data from. Its an array with each array element describing a data retrieval and processing step. One or more steps will result in a SeedPacket file that is later used to recreate the data in your target org.
 
+> Note - as of March 2022 you can ask SeedPacket to try to generate a definition file for you - just use the debug console and try 'SeedPacket.generateAndSendSeedPacketSteps(<query>);' where <query> is a typical SOQL query to use as a starting point e.g. 'Select Id from Account limit 10'.  SeedPacket will use that query as a starting point to traverse the datamodel and construct a definition file for you. The file is then emailed to you for further refinement.
+
 * **description** is optional and not used; its just there to remind you of what the step is doing.
 * **name** is the name of the step. Keep this unique and you can reference it later in subsequent queries to retrieve related data. More on that later.
 * **datatable** is the object you want to retrieve data from.
@@ -145,5 +147,6 @@ The Sandbox Post copy interface has also been included so feel free to do the sa
 Rather than every query resulting in its data being replicated into the seedpacket, if you want to use a step for reference but not replicate its records then just prefix the step name attribute with 'READONLY__' e.g. I want to query Accounts and not recreate them, just name the step something like 'READONLY__AccountsQuery'.  You can reference that steps data like you would any other query - in this example a step query attribute like 'Where AccountId IN [[READONLY__AccountsQuery.Id]]' would work just like any other query.  I've found this really helpful when trying to find relevant data to replicate.  You can run a READONLY__ query against cases for example, and then start your actual retrieve and replicate steps using the account ids that that first readonly step found.
 
 ## Enhancements
-March 2022 / Fixed CPU heap error for complex runs ie. more than 30 steps.  Runs more efficiently now!
-March 2022 / Addition of the READONLY__ feature.
+* March 2022 / Fixed CPU heap error for complex runs ie. more than 30 steps.  Far more efficient now!
+* March 2022 / Addition of the READONLY__ feature.
+* March 2022 / Addition of the 'generateSeedPacketSteps' logic.
